@@ -97,6 +97,10 @@
     <br />
     <textarea readonly v-model="settingsOutput" class="output"></textarea>
     <br />
+    <div v-if="isTooLong">
+      The settings string is too long!
+    </div>
+    <div>{{ this.settingsOutput64.length }} / 256</div>
     <textarea readonly v-model="settingsOutput64" class="output"></textarea>
   </div>
 </template>
@@ -164,21 +168,19 @@ export default {
       } ${this.settingsInput.data.keysOverlapColor.b}`;
 
       const settingsOutput = {
-        MHud: {
-          owner: this.settingsInput.owner,
-          rev: '1',
-          data: [
-            this.settingsInput.data.speedToggle ? 1 : 0,
-            speedPosition,
-            speedNormalColor,
-            speedPerfColor,
-            this.settingsInput.data.speedDisplayFormat ? 1 : 0,
-            this.settingsInput.data.keysToggle ? 1 : 0,
-            keysPosition,
-            keysNormalColor,
-            keysOverlapColor,
-          ],
-        },
+        owner: this.settingsInput.owner,
+        rev: '1',
+        data: [
+          this.settingsInput.data.speedToggle ? '1' : '0',
+          speedPosition,
+          speedNormalColor,
+          speedPerfColor,
+          this.settingsInput.data.speedDisplayFormat ? '1' : '0',
+          this.settingsInput.data.keysToggle ? '1' : '0',
+          keysPosition,
+          keysNormalColor,
+          keysOverlapColor,
+        ],
       };
 
       const outputString = JSON.stringify(settingsOutput);
@@ -189,6 +191,10 @@ export default {
       const base64OutputString = btoa(this.settingsOutput);
 
       return base64OutputString;
+    },
+    isTooLong() {
+      const maxLength = 256 - 'sm_mhud_settings_import'.length;
+      return this.settingsOutput64.length > maxLength;
     },
   },
 };
