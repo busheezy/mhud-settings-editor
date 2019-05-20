@@ -16,6 +16,7 @@
       v-model="settingsInput.data.speedPositionX"
       min="-1"
       max="1"
+      step="0.1"
     /><br />
 
     Speed Position Y:<br />
@@ -24,6 +25,7 @@
       v-model="settingsInput.data.speedPositionY"
       min="-1"
       max="1"
+      step="0.1"
     /><br />
 
     Speed Normal Color:
@@ -58,6 +60,7 @@
       v-model="settingsInput.data.keysPositionX"
       min="-1"
       max="1"
+      step="0.1"
     /><br />
 
     Keys Position Y:<br />
@@ -66,6 +69,7 @@
       v-model="settingsInput.data.keysPositionY"
       min="-1"
       max="1"
+      step="0.1"
     /><br />
 
     Keys Normal Color:
