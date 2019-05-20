@@ -203,6 +203,6 @@ export default {
 <style>
 .output {
   width: 100%;
-  height: 120px;
+  height: 40px;
 }
 </style>
