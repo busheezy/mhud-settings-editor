@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     Owner:<br />
-    <input type="text" v-model="settingsInput.owner" /><br />
+    <input
+      type="text"
+      v-model="settingsInput.owner"
+      placeholder="steamID3"
+    /><br />
 
     Speed Toggle:
     <input
@@ -99,7 +103,6 @@
 
 <script>
 import { Sketch } from 'vue-color';
-import * as simpleVdf from 'simple-vdf2';
 
 const color = { r: 255, g: 0, b: 0, a: 1 };
 
@@ -111,7 +114,7 @@ export default {
     return {
       color,
       settingsInput: {
-        owner: 'bush',
+        owner: '',
         data: {
           speedToggle: false,
           speedPositionX: 0,
@@ -126,7 +129,7 @@ export default {
           keysOverlapColor: color,
         },
       },
-      disableAlpha: false,
+      disableAlpha: true,
     };
   },
   methods: {
@@ -142,15 +145,11 @@ export default {
 
       const speedNormalColor = `${this.settingsInput.data.speedNormalColor.r} ${
         this.settingsInput.data.speedNormalColor.g
-      } ${this.settingsInput.data.speedNormalColor.b} ${
-        this.settingsInput.data.speedNormalColor.a
-      }`;
+      } ${this.settingsInput.data.speedNormalColor.b}`;
 
       const speedPerfColor = `${this.settingsInput.data.speedPerfColor.r} ${
         this.settingsInput.data.speedPerfColor.g
-      } ${this.settingsInput.data.speedPerfColor.b} ${
-        this.settingsInput.data.speedPerfColor.a
-      }`;
+      } ${this.settingsInput.data.speedPerfColor.b}`;
 
       const keysPosition = `${this.settingsInput.data.keysPositionX} ${
         this.settingsInput.data.keysPositionY
@@ -158,38 +157,31 @@ export default {
 
       const keysNormalColor = `${this.settingsInput.data.keysNormalColor.r} ${
         this.settingsInput.data.keysNormalColor.g
-      } ${this.settingsInput.data.keysNormalColor.b} ${
-        this.settingsInput.data.keysNormalColor.a
-      }`;
+      } ${this.settingsInput.data.keysNormalColor.b}`;
 
       const keysOverlapColor = `${this.settingsInput.data.keysOverlapColor.r} ${
         this.settingsInput.data.keysOverlapColor.g
-      } ${this.settingsInput.data.keysOverlapColor.b} ${
-        this.settingsInput.data.keysOverlapColor.a
-      }`;
+      } ${this.settingsInput.data.keysOverlapColor.b}`;
 
       const settingsOutput = {
         MHud: {
           owner: this.settingsInput.owner,
           rev: '1',
-          data: {
-            '0': this.settingsInput.data.speedToggle ? 1 : 0,
-            '1': speedPosition,
-            '2': speedNormalColor,
-            '3': speedPerfColor,
-            '4': this.settingsInput.data.speedDisplayFormat ? 1 : 0,
-            '5': this.settingsInput.data.keysToggle ? 1 : 0,
-            '6': keysPosition,
-            '7': keysNormalColor,
-            '8': keysOverlapColor,
-          },
+          data: [
+            this.settingsInput.data.speedToggle ? 1 : 0,
+            speedPosition,
+            speedNormalColor,
+            speedPerfColor,
+            this.settingsInput.data.speedDisplayFormat ? 1 : 0,
+            this.settingsInput.data.keysToggle ? 1 : 0,
+            keysPosition,
+            keysNormalColor,
+            keysOverlapColor,
+          ],
         },
       };
 
-      const outputString = simpleVdf
-        .stringify(settingsOutput, false)
-        .replace(/\r?\n|\r/g, '')
-        .replace(/\t/g, '');
+      const outputString = JSON.stringify(settingsOutput);
 
       return outputString;
     },

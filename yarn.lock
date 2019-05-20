@@ -7093,11 +7093,6 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
-simple-vdf2@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/simple-vdf2/-/simple-vdf2-1.2.1.tgz#75b3c5e608b219703ac39a349bbd12b2fb6273c7"
-  integrity sha512-u9z57UWkd7DeHO0VAB5uPxy27Ad5xJ8vnzYHqjwEG6GsuOj/KmDFl0bhZFhXeU5+j3FFHo0UKhNESj5wW36jRg==
-
 slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
