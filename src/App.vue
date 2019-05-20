@@ -1,8 +1,5 @@
 <template>
   <div id="app">
-    Disable Alpha:
-    <input type="checkbox" id="checkbox" v-model="disableAlpha" /><br />
-
     Owner:<br />
     <input type="text" v-model="settingsInput.owner" /><br />
 
@@ -138,8 +135,6 @@ export default {
       const speedPosition = `${this.settingsInput.data.speedPositionX} ${
         this.settingsInput.data.speedPositionY
       }`;
-
-      console.log(JSON.stringify(this.settingsInput, null, 2));
 
       const speedNormalColor = `${this.settingsInput.data.speedNormalColor.r} ${
         this.settingsInput.data.speedNormalColor.g
