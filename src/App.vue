@@ -2,8 +2,8 @@
   <div id="app">
     Owner:<br />
     <input
-      type="text"
-      v-model="settingsInput.owner"
+      type="number"
+      v-model.number="settingsInput.owner"
       placeholder="steamID3"
     /><br />
 
@@ -118,7 +118,7 @@ export default {
     return {
       color,
       settingsInput: {
-        owner: '',
+        owner: null,
         data: {
           speedToggle: false,
           speedPositionX: 0,
@@ -169,7 +169,7 @@ export default {
 
       const settingsOutput = {
         owner: this.settingsInput.owner,
-        rev: '1',
+        rev: 1,
         data: [
           this.settingsInput.data.speedToggle ? '1' : '0',
           speedPosition,
