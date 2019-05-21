@@ -53,12 +53,24 @@
               <label class="label">Owner</label>
               <div class="control">
                 <input
-                  type="number"
-                  v-model.number="settingsInput.owner"
-                  placeholder="steamID3"
+                  type="text"
+                  v-model="settingsInput.owner"
+                  placeholder="STEAM_0:1:6157769"
                   class="input"
+                  :class="{
+                    'is-danger':
+                      !validSteamID && this.settingsInput.owner !== '',
+                    'is-success': validSteamID,
+                  }"
                 />
               </div>
+            </div>
+
+            <div
+              class="notification is-danger p-1"
+              v-if="!validSteamID && this.settingsInput.owner !== ''"
+            >
+              Invalid Steam ID
             </div>
 
             <div class="field">
@@ -224,6 +236,8 @@
 </template>
 
 <script>
+import * as SteamID from 'steamid';
+
 function rgbToHex(r, g, b) {
   const result =
     '#' +
@@ -258,7 +272,7 @@ export default {
       showLoad: false,
       loadInput: '',
       settingsInput: {
-        owner: null,
+        owner: '',
         data: {
           speedToggle: false,
           speedPositionX: -1.0,
@@ -405,8 +419,15 @@ export default {
         keysOverlapColorObj.g
       } ${keysOverlapColorObj.b}`;
 
+      let owner = null;
+
+      if (this.validSteamID) {
+        const steamId = new SteamID(this.settingsInput.owner);
+        owner = steamId.accountid;
+      }
+
       const settingsOutput = {
-        owner: this.settingsInput.owner,
+        owner,
         rev: 1,
         data: [
           this.settingsInput.data.speedToggle ? '1' : '0',
@@ -433,6 +454,14 @@ export default {
     isTooLong() {
       const maxLength = 256 - 'sm_mhud_settings_import '.length;
       return this.settingsOutput64.length > maxLength;
+    },
+    validSteamID() {
+      try {
+        const steamId = new SteamID(this.settingsInput.owner);
+        return steamId.isValid();
+      } catch {
+        return false;
+      }
     },
   },
 };

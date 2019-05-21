@@ -2627,6 +2627,11 @@ csso@^3.5.1:
   dependencies:
     css-tree "1.0.0-alpha.29"
 
+cuint@^0.2.1:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/cuint/-/cuint-0.2.2.tgz#408086d409550c2631155619e9fa7bcadc3b991b"
+  integrity sha1-QICG1AlVDCYxFVYZ6fp7ytw7mRs=
+
 current-script-polyfill@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/current-script-polyfill/-/current-script-polyfill-1.0.0.tgz#f31cf7e4f3e218b0726e738ca92a02d3488ef615"
@@ -7713,6 +7718,13 @@ stealthy-require@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
   integrity sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
+
+steamid@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/steamid/-/steamid-1.1.0.tgz#eccfbf24547f4e9b1d27fcb83da62a6a41139986"
+  integrity sha1-7M+/JFR/TpsdJ/y4PaYqakETmYY=
+  dependencies:
+    cuint "^0.2.1"
 
 stream-browserify@^2.0.1:
   version "2.0.2"
