@@ -5,20 +5,29 @@
       <textarea class="input" v-model="loadInput"></textarea><br />
       <button @click="onLoadInput">Load</button>
     </div>
+
     <br />
+    <br />
+
     Owner:<br />
     <input
       type="number"
       v-model.number="settingsInput.owner"
       placeholder="steamID3"
-    /><br />
+    />
+
+    <br />
+    <br />
 
     Speed Toggle:
     <input
       type="checkbox"
       id="checkbox"
       v-model="settingsInput.data.speedToggle"
-    /><br />
+    />
+
+    <br />
+    <br />
 
     Speed Position X:<br />
     <input
@@ -27,7 +36,10 @@
       min="-1"
       max="1"
       step="0.1"
-    /><br />
+    />
+
+    <br />
+    <br />
 
     Speed Position Y:<br />
     <input
@@ -36,14 +48,21 @@
       min="-1"
       max="1"
       step="0.1"
-    /><br />
+    />
+
+    <br />
+    <br />
 
     Speed Normal Color:<br />
     <input type="color" v-model="settingsInput.data.speedNormalColor" />
+
+    <br />
     <br />
 
     Speed Perf Color:<br />
     <input type="color" v-model="settingsInput.data.speedPerfColor" />
+
+    <br />
     <br />
 
     Keys Toggle:
@@ -52,6 +71,8 @@
       id="checkbox"
       v-model="settingsInput.data.keysToggle"
     />
+
+    <br />
     <br />
 
     Keys Position X:<br />
@@ -61,7 +82,10 @@
       min="-1"
       max="1"
       step="0.1"
-    /><br />
+    />
+
+    <br />
+    <br />
 
     Keys Position Y:<br />
     <input
@@ -70,22 +94,29 @@
       min="-1"
       max="1"
       step="0.1"
-    /><br />
+    />
+
+    <br />
+    <br />
 
     Keys Normal Color:<br />
     <input type="color" v-model="settingsInput.data.keysNormalColor" />
+
+    <br />
     <br />
 
     Keys Overlap Color:<br />
     <input type="color" v-model="settingsInput.data.keysOverlapColor" />
+
+    <br />
     <br />
 
-    <textarea readonly v-model="settingsOutput" class="output"></textarea>
-    <br />
     <div v-if="isTooLong">
       The settings string is too long!
     </div>
+
     <div>{{ this.settingsOutput64.length }} / 256</div>
+
     <textarea readonly v-model="settingsOutput64" class="output"></textarea>
   </div>
 </template>
