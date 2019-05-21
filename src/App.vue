@@ -1,5 +1,11 @@
 <template>
   <div id="app">
+    <button v-if="!showLoad" @click="showLoad = true">Load</button>
+    <div v-else>
+      <textarea class="input" v-model="loadInput"></textarea><br />
+      <button @click="onLoadInput">Load</button>
+    </div>
+    <br />
     Owner:<br />
     <input
       type="number"
@@ -32,22 +38,13 @@
       step="0.1"
     /><br />
 
-    Speed Normal Color:
-    <Sketch
-      :value="color"
-      :disableAlpha="disableAlpha"
-      disableFields
-      @input="updateValue($event, 'speedNormalColor')"
-    ></Sketch>
+    Speed Normal Color:<br />
+    <input type="color" v-model="settingsInput.data.speedNormalColor" />
     <br />
 
-    Speed Perf Color:
-    <Sketch
-      :value="color"
-      :disableAlpha="disableAlpha"
-      disableFields
-      @input="updateValue($event, 'speedPerfColor')"
-    ></Sketch>
+    Speed Perf Color:<br />
+    <input type="color" v-model="settingsInput.data.speedPerfColor" />
+    <br />
     <br />
 
     Keys Toggle:
@@ -76,22 +73,13 @@
       step="0.1"
     /><br />
 
-    Keys Normal Color:
-    <Sketch
-      :value="color"
-      :disableAlpha="disableAlpha"
-      disableFields
-      @input="updateValue($event, 'keysNormalColor')"
-    ></Sketch>
+    Keys Normal Color:<br />
+    <input type="color" v-model="settingsInput.data.keysNormalColor" />
     <br />
 
-    Keys Overlap Color:
-    <Sketch
-      :value="color"
-      :disableAlpha="disableAlpha"
-      disableFields
-      @input="updateValue($event, 'keysOverlapColor')"
-    ></Sketch>
+    Keys Overlap Color:<br />
+    <input type="color" v-model="settingsInput.data.keysOverlapColor" />
+    <br />
     <br />
     <br />
     <br />
@@ -106,39 +94,143 @@
 </template>
 
 <script>
-import { Sketch } from 'vue-color';
+function rgbToHex(r, g, b) {
+  const result =
+    '#' +
+    (
+      (1 << 24) +
+      (parseInt(r, 10) << 16) +
+      (parseInt(g, 10) << 8) +
+      parseInt(b, 10)
+    )
+      .toString(16)
+      .slice(1);
 
-const color = { r: 255, g: 0, b: 0, a: 1 };
+  return result;
+}
+
+function hexToRgb(hex) {
+  const execResult = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  const result = execResult
+    ? {
+        r: parseInt(execResult[1], 16),
+        g: parseInt(execResult[2], 16),
+        b: parseInt(execResult[3], 16),
+      }
+    : null;
+
+  return result;
+}
 
 export default {
-  components: {
-    Sketch,
-  },
   data() {
     return {
-      color,
+      showLoad: false,
+      loadInput: '',
       settingsInput: {
         owner: null,
         data: {
           speedToggle: false,
           speedPositionX: 0,
           speedPositionY: 0,
-          speedNormalColor: color,
-          speedPerfColor: color,
+          speedNormalColor: '#00FFFF',
+          speedPerfColor: '#00FF00',
           speedDisplayFormat: false,
           keysToggle: false,
           keysPositionX: 0,
           keysPositionY: 0,
-          keysNormalColor: color,
-          keysOverlapColor: color,
+          keysNormalColor: '#FFFFFF',
+          keysOverlapColor: '#FF0000',
         },
       },
       disableAlpha: true,
     };
   },
   methods: {
-    updateValue(update, field) {
-      this.settingsInput.data[field] = update.rgba;
+    onLoadInput() {
+      const json = atob(this.loadInput);
+      const obj = JSON.parse(json);
+
+      this.settingsInput.owner = obj.owner;
+      this.settingsInput.rev = obj.rev;
+
+      const [
+        speedToggle,
+        speedPosition,
+        speedNormalColor,
+        speedPerfColor,
+        speedDisplayFormat,
+        keysToggle,
+        keysPosition,
+        keysNormalColor,
+        keysOverlapColor,
+      ] = obj.data;
+
+      const [speedPositionX, speedPositionY] = speedPosition.split(' ');
+
+      const [
+        speedNormalColorR,
+        speedNormalColorG,
+        speedNormalColorB,
+      ] = speedNormalColor.split(' ');
+
+      const [
+        speedPerfColorR,
+        speedPerfColorG,
+        speedPerfColorB,
+      ] = speedPerfColor.split(' ');
+
+      const [keysPositionX, keysPositionY] = keysPosition.split(' ');
+
+      const [
+        keysNormalColorR,
+        keysNormalColorG,
+        keysNormalColorB,
+      ] = keysNormalColor.split(' ');
+
+      const [
+        keysOverlapColorR,
+        keysOverlapColorG,
+        keysOverlapColorB,
+      ] = keysOverlapColor.split(' ');
+
+      this.settingsInput.data.speedToggle = speedToggle === '1';
+
+      this.settingsInput.data.speedPositionX = speedPositionX;
+      this.settingsInput.data.speedPositionY = speedPositionY;
+
+      this.settingsInput.data.speedNormalColor = rgbToHex(
+        speedNormalColorR,
+        speedNormalColorG,
+        speedNormalColorB,
+      );
+
+      this.settingsInput.data.speedPerfColor = rgbToHex(
+        speedPerfColorR,
+        speedPerfColorG,
+        speedPerfColorB,
+      );
+
+      this.settingsInput.data.speedDisplayFormat = speedDisplayFormat === '1';
+
+      this.settingsInput.data.keysToggle = keysToggle === '1';
+
+      this.settingsInput.data.keysPositionX = keysPositionX;
+      this.settingsInput.data.keysPositionY = keysPositionY;
+
+      this.settingsInput.data.keysNormalColor = rgbToHex(
+        keysNormalColorR,
+        keysNormalColorG,
+        keysNormalColorB,
+      );
+
+      this.settingsInput.data.keysOverlapColor = rgbToHex(
+        keysOverlapColorR,
+        keysOverlapColorG,
+        keysOverlapColorB,
+      );
+
+      this.showLoad = false;
     },
   },
   computed: {
@@ -147,25 +239,41 @@ export default {
         this.settingsInput.data.speedPositionY
       }`;
 
-      const speedNormalColor = `${this.settingsInput.data.speedNormalColor.r} ${
-        this.settingsInput.data.speedNormalColor.g
-      } ${this.settingsInput.data.speedNormalColor.b}`;
+      const speedNormalColorObj = hexToRgb(
+        this.settingsInput.data.speedNormalColor,
+      );
 
-      const speedPerfColor = `${this.settingsInput.data.speedPerfColor.r} ${
-        this.settingsInput.data.speedPerfColor.g
-      } ${this.settingsInput.data.speedPerfColor.b}`;
+      const speedNormalColor = `${speedNormalColorObj.r} ${
+        speedNormalColorObj.g
+      } ${speedNormalColorObj.b}`;
+
+      const speedPerfColorObj = hexToRgb(
+        this.settingsInput.data.speedPerfColor,
+      );
+
+      const speedPerfColor = `${speedPerfColorObj.r} ${speedPerfColorObj.g} ${
+        speedPerfColorObj.b
+      }`;
 
       const keysPosition = `${this.settingsInput.data.keysPositionX} ${
         this.settingsInput.data.keysPositionY
       }`;
 
-      const keysNormalColor = `${this.settingsInput.data.keysNormalColor.r} ${
-        this.settingsInput.data.keysNormalColor.g
-      } ${this.settingsInput.data.keysNormalColor.b}`;
+      const keysNormalColorObj = hexToRgb(
+        this.settingsInput.data.keysNormalColor,
+      );
 
-      const keysOverlapColor = `${this.settingsInput.data.keysOverlapColor.r} ${
-        this.settingsInput.data.keysOverlapColor.g
-      } ${this.settingsInput.data.keysOverlapColor.b}`;
+      const keysNormalColor = `${keysNormalColorObj.r} ${
+        keysNormalColorObj.g
+      } ${keysNormalColorObj.b}`;
+
+      const keysOverlapColorObj = hexToRgb(
+        this.settingsInput.data.keysNormalColor,
+      );
+
+      const keysOverlapColor = `${keysOverlapColorObj.r} ${
+        keysOverlapColorObj.g
+      } ${keysOverlapColorObj.b}`;
 
       const settingsOutput = {
         owner: this.settingsInput.owner,
@@ -202,6 +310,11 @@ export default {
 
 <style>
 .output {
+  width: 100%;
+  height: 40px;
+}
+
+.input {
   width: 100%;
   height: 40px;
 }
