@@ -55,7 +55,7 @@
                 <input
                   type="text"
                   v-model="settingsInput.owner"
-                  placeholder="STEAM_0:1:6157769"
+                  placeholder="STEAM_1:1:6157769"
                   class="input"
                   :class="{
                     'is-danger':
