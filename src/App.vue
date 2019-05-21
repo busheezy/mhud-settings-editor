@@ -292,7 +292,8 @@ export default {
   },
   methods: {
     onLoadInput() {
-      const json = atob(this.loadInput);
+      const loadInput = this.loadInput.replace('sm_mhud_settings_import ', '');
+      const json = atob(loadInput);
       const obj = JSON.parse(json);
 
       this.settingsInput.owner = obj.owner;
