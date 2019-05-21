@@ -299,7 +299,7 @@ export default {
       const steamID = new SteamID(obj.owner);
 
       if (steamID.isValid()) {
-        this.settingsInput.owner = steamID.accountid;
+        this.settingsInput.owner = steamID.getSteam2RenderedID(true);
       }
 
       this.settingsInput.rev = obj.rev;
