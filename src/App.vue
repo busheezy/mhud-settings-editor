@@ -79,9 +79,7 @@
     Keys Overlap Color:<br />
     <input type="color" v-model="settingsInput.data.keysOverlapColor" />
     <br />
-    <br />
-    <br />
-    <br />
+
     <textarea readonly v-model="settingsOutput" class="output"></textarea>
     <br />
     <div v-if="isTooLong">
