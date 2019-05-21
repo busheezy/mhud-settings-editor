@@ -296,7 +296,12 @@ export default {
       const json = atob(loadInput);
       const obj = JSON.parse(json);
 
-      this.settingsInput.owner = obj.owner;
+      const steamID = new SteamID(obj.owner);
+
+      if (steamID.isValid()) {
+        this.settingsInput.owner = steamID.accountid;
+      }
+
       this.settingsInput.rev = obj.rev;
 
       const [
