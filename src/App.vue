@@ -8,7 +8,7 @@
               MovementHUD Settings Editor
             </h1>
             <p class="subtitle">
-              Edit your <strong>MovementHUD</strong> setting's with ease!
+              Edit your <strong>MovementHUD</strong> settings with ease!
             </p>
 
             <button
