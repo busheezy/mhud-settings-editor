@@ -1,123 +1,224 @@
 <template>
   <div id="app">
-    <button v-if="!showLoad" @click="showLoad = true">Load</button>
-    <div v-else>
-      <textarea class="input" v-model="loadInput"></textarea><br />
-      <button @click="onLoadInput">Load</button>
-    </div>
+    <section class="section">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-half is-offset-one-quarter">
+            <h1 class="title">
+              MovementHUD Setting's Editor
+            </h1>
+            <p class="subtitle">
+              Edit your <strong>MovementHUD</strong> settings with ease!
+            </p>
 
-    <br />
-    <br />
+            <button
+              v-if="!showLoad"
+              @click="showLoad = true"
+              class="button mb-1 is-primary"
+            >
+              Load Settings
+            </button>
+            <div class="box" v-else>
+              <div class="is-size-4 mb-2">
+                Load Settings
+              </div>
+              <textarea
+                class="textarea mb-1"
+                v-model="loadInput"
+                placeholder="base64 string"
+              >
+              </textarea>
+              <br />
+              <div class="columns">
+                <div class="column">
+                  <button
+                    @click="showLoad = false"
+                    class="button is-danger is-fullwidth"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div class="column">
+                  <button
+                    @click="onLoadInput"
+                    class="button is-primary is-fullwidth"
+                  >
+                    Load
+                  </button>
+                </div>
+              </div>
+            </div>
 
-    Owner:<br />
-    <input
-      type="number"
-      v-model.number="settingsInput.owner"
-      placeholder="steamID3"
-    />
+            <div class="field">
+              <label class="label">Owner</label>
+              <div class="control">
+                <input
+                  type="number"
+                  v-model.number="settingsInput.owner"
+                  placeholder="steamID3"
+                  class="input"
+                />
+              </div>
+            </div>
 
-    <br />
-    <br />
+            <div class="field">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  id="checkbox"
+                  v-model="settingsInput.data.speedToggle"
+                />
+                Show Speed
+              </label>
+            </div>
 
-    Speed Toggle:
-    <input
-      type="checkbox"
-      id="checkbox"
-      v-model="settingsInput.data.speedToggle"
-    />
+            <div class="field">
+              <label class="label">Speed Position X</label>
+              <div class="control">
+                <input
+                  type="number"
+                  v-model="settingsInput.data.speedPositionX"
+                  min="-1"
+                  max="1"
+                  step="0.1"
+                  class="input"
+                />
+              </div>
+            </div>
 
-    <br />
-    <br />
+            <div class="field">
+              <label class="label">Speed Position Y</label>
+              <div class="control">
+                <input
+                  type="number"
+                  v-model="settingsInput.data.speedPositionY"
+                  min="-1"
+                  max="1"
+                  step="0.1"
+                  class="input"
+                />
+              </div>
+            </div>
 
-    Speed Position X:<br />
-    <input
-      type="number"
-      v-model="settingsInput.data.speedPositionX"
-      min="-1"
-      max="1"
-      step="0.1"
-    />
+            <div class="field">
+              <label class="label">Speed Normal Color</label>
+              <div class="control">
+                <input
+                  type="color"
+                  v-model="settingsInput.data.speedNormalColor"
+                  class="input"
+                />
+              </div>
+            </div>
 
-    <br />
-    <br />
+            <div class="field">
+              <label class="label">Speed Perf Color</label>
+              <div class="control">
+                <input
+                  type="color"
+                  v-model="settingsInput.data.speedPerfColor"
+                  class="input"
+                />
+              </div>
+            </div>
 
-    Speed Position Y:<br />
-    <input
-      type="number"
-      v-model="settingsInput.data.speedPositionY"
-      min="-1"
-      max="1"
-      step="0.1"
-    />
+            <div class="field">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  id="checkbox"
+                  v-model="settingsInput.data.keysToggle"
+                />
+                Show Keys
+              </label>
+            </div>
 
-    <br />
-    <br />
+            <div class="field">
+              <label class="label">Keys Position X</label>
+              <div class="control">
+                <input
+                  type="number"
+                  v-model="settingsInput.data.keysPositionX"
+                  min="-1"
+                  max="1"
+                  step="0.1"
+                  class="input"
+                />
+              </div>
+            </div>
 
-    Speed Normal Color:<br />
-    <input type="color" v-model="settingsInput.data.speedNormalColor" />
+            <div class="field">
+              <label class="label">Keys Position Y</label>
+              <div class="control">
+                <input
+                  type="number"
+                  v-model="settingsInput.data.keysPositionY"
+                  min="-1"
+                  max="1"
+                  step="0.1"
+                  class="input"
+                />
+              </div>
+            </div>
 
-    <br />
-    <br />
+            <div class="field">
+              <label class="label">Keys Normal Color</label>
+              <div class="control">
+                <input
+                  type="color"
+                  v-model="settingsInput.data.keysNormalColor"
+                  class="input"
+                />
+              </div>
+            </div>
 
-    Speed Perf Color:<br />
-    <input type="color" v-model="settingsInput.data.speedPerfColor" />
+            <div class="field">
+              <label class="label">Keys Overlap Color</label>
+              <div class="control">
+                <input
+                  type="color"
+                  v-model="settingsInput.data.keysOverlapColor"
+                  class="input"
+                />
+              </div>
+            </div>
+            <div class="box mt-4">
+              <div class="is-size-4 mb-2">
+                Output
+              </div>
 
-    <br />
-    <br />
+              <div>{{ settingsOutput64.length }} / 256</div>
+              <progress
+                class="progress"
+                :value="settingsOutput64.length"
+                max="256"
+              >
+                {{ settingsOutput64.length }} / 256
+              </progress>
 
-    Keys Toggle:
-    <input
-      type="checkbox"
-      id="checkbox"
-      v-model="settingsInput.data.keysToggle"
-    />
+              <div class="notification is-danger" v-if="isTooLong">
+                The settings output string is too long!
+              </div>
 
-    <br />
-    <br />
+              <textarea v-model="settingsOutput64" class="textarea" readonly>
+              </textarea>
 
-    Keys Position X:<br />
-    <input
-      type="number"
-      v-model="settingsInput.data.keysPositionX"
-      min="-1"
-      max="1"
-      step="0.1"
-    />
+              <button
+                type="button"
+                class="button is-primary is-fullwidth"
+                v-clipboard:copy="settingsOutput64"
+              >
+                Copy to clipboard!
+              </button>
 
-    <br />
-    <br />
-
-    Keys Position Y:<br />
-    <input
-      type="number"
-      v-model="settingsInput.data.keysPositionY"
-      min="-1"
-      max="1"
-      step="0.1"
-    />
-
-    <br />
-    <br />
-
-    Keys Normal Color:<br />
-    <input type="color" v-model="settingsInput.data.keysNormalColor" />
-
-    <br />
-    <br />
-
-    Keys Overlap Color:<br />
-    <input type="color" v-model="settingsInput.data.keysOverlapColor" />
-
-    <br />
-    <br />
-
-    <div v-if="isTooLong">
-      The settings string is too long!
-    </div>
-
-    <div>{{ this.settingsOutput64.length }} / 256</div>
-
-    <textarea readonly v-model="settingsOutput64" class="output"></textarea>
+              <div class="p-1 is-info mt-2 has-text-centered">
+                After copying the output, paste directly into console.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -326,10 +427,10 @@ export default {
     settingsOutput64() {
       const base64OutputString = btoa(this.settingsOutput);
 
-      return base64OutputString;
+      return `sm_mhud_settings_import ${base64OutputString}`;
     },
     isTooLong() {
-      const maxLength = 256 - 'sm_mhud_settings_import'.length;
+      const maxLength = 256 - 'sm_mhud_settings_import '.length;
       return this.settingsOutput64.length > maxLength;
     },
   },

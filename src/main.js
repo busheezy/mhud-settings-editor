@@ -1,7 +1,12 @@
 import Vue from 'vue';
+import VueClipboard from 'vue-clipboard2';
 import App from './App.vue';
 
 Vue.config.productionTip = false;
+
+require('./assets/sass/main.scss');
+
+Vue.use(VueClipboard);
 
 new Vue({
   render: h => h(App),
