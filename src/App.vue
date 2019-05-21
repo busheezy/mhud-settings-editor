@@ -205,14 +205,15 @@
 
               <button
                 type="button"
-                class="button is-primary is-fullwidth"
+                class="button is-primary is-fullwidth mt-2"
                 v-clipboard:copy="settingsOutput64"
               >
                 Copy to clipboard!
               </button>
 
               <div class="p-1 is-info mt-2 has-text-centered">
-                After copying the output, paste directly into console.
+                After copying the output, paste directly into console and press
+                enter.
               </div>
             </div>
           </div>
