@@ -268,7 +268,7 @@ export default {
       } ${keysNormalColorObj.b}`;
 
       const keysOverlapColorObj = hexToRgb(
-        this.settingsInput.data.keysNormalColor,
+        this.settingsInput.data.keysOverlapColor,
       );
 
       const keysOverlapColor = `${keysOverlapColorObj.r} ${
