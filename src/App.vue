@@ -45,7 +45,6 @@
     Speed Perf Color:<br />
     <input type="color" v-model="settingsInput.data.speedPerfColor" />
     <br />
-    <br />
 
     Keys Toggle:
     <input
