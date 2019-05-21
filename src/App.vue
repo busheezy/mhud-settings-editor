@@ -296,7 +296,7 @@ export default {
       const json = atob(loadInput);
       const obj = JSON.parse(json);
 
-      const steamID = new SteamID(obj.owner);
+      const steamID = SteamID.fromIndividualAccountID(obj.owner);
 
       if (steamID.isValid()) {
         this.settingsInput.owner = steamID.getSteam2RenderedID(true);
