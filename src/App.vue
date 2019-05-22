@@ -310,6 +310,17 @@ export default {
       const settingsString = urlParams.get('settings');
       this.parse64(settingsString, false);
     }
+
+    window.onpopstate = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      if (urlParams.has('settings')) {
+        const settingsString = urlParams.get('settings');
+        this.parse64(settingsString, false);
+      } else {
+        this.resetInput();
+      }
+    };
   },
   methods: {
     onLoadInput() {
@@ -486,14 +497,14 @@ export default {
       const base64OutputString = btoa(this.settingsOutput);
 
       if (_.isEqual(this.settingsInput, getDefaultSettings())) {
-        window.history.pushState({}, document.title, '/');
+        window.history.replaceState({}, document.title, '/');
       } else {
         const urlParams = new URLSearchParams();
 
         urlParams.set('settings', base64OutputString);
 
         const pageUrl = '?' + urlParams.toString();
-        window.history.pushState({}, document.title, pageUrl);
+        window.history.replaceState({}, document.title, pageUrl);
       }
 
       return `sm_mhud_settings_import ${base64OutputString}`;
