@@ -14,12 +14,12 @@
             <button
               v-if="!showLoad"
               @click="showLoad = true"
-              class="button mb-1 is-primary"
+              class="button mb-1 is-primary mr-2"
             >
               Load Settings
             </button>
 
-            <button @click="resetInput" class="button mb-1 is-warning ml-2">
+            <button @click="resetInput" class="button mb-1 is-warning">
               Reset Settings
             </button>
 
@@ -63,9 +63,8 @@
                   placeholder="STEAM_1:1:6157769"
                   class="input"
                   :class="{
-                    'is-danger':
-                      !validSteamID && this.settingsInput.owner !== '',
-                    'is-success': validSteamID,
+                    'is-danger': !validOwner && this.settingsInput.owner !== '',
+                    'is-success': validOwner,
                   }"
                 />
               </div>
@@ -73,7 +72,7 @@
 
             <div
               class="notification is-danger p-1"
-              v-if="!validSteamID && this.settingsInput.owner !== ''"
+              v-if="!validOwner && this.settingsInput.owner !== ''"
             >
               Invalid Steam ID
             </div>
@@ -304,19 +303,20 @@ export default {
     };
   },
   created() {
-    const urlParams = new URLSearchParams(window.location.search);
+    const b64Encoded = window.location.hash.replace('#', '');
+    const b64 = decodeURIComponent(b64Encoded);
 
-    if (urlParams.has('settings')) {
-      const settingsString = urlParams.get('settings');
-      this.parse64(settingsString, false);
+    if (b64) {
+      this.parse64(b64);
     }
 
-    window.onpopstate = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-
-      if (urlParams.has('settings')) {
-        const settingsString = urlParams.get('settings');
-        this.parse64(settingsString, false);
+    window.onhashchange = () => {
+      const b64ChangeEncoded = window.location.hash.replace('#', '');
+      if (b64ChangeEncoded !== '') {
+        const b64Change = decodeURIComponent(b64ChangeEncoded);
+        if (b64Change) {
+          this.parse64(b64Change);
+        }
       } else {
         this.resetInput();
       }
@@ -333,13 +333,23 @@ export default {
     resetInput() {
       this.settingsInput = getDefaultSettings();
     },
+    validSteamID(steamId) {
+      if (steamId === '') {
+        return false;
+      }
+      try {
+        const steamId = new SteamID(steamId);
+        return steamId.isValid();
+      } catch {
+        return false;
+      }
+    },
     parse64(b64String) {
       const json = atob(b64String);
       const obj = JSON.parse(json);
 
-      const steamID = SteamID.fromIndividualAccountID(obj.owner);
-
-      if (obj.owner !== '' && steamID.isValid()) {
+      if (this.validOwner) {
+        const steamID = SteamID.fromIndividualAccountID(obj.owner);
         this.settingsInput.owner = steamID.getSteam2RenderedID(true);
       } else {
         this.settingsInput.owner = '';
@@ -468,7 +478,7 @@ export default {
 
       let owner = '';
 
-      if (this.validSteamID) {
+      if (this.validOwner) {
         const steamId = new SteamID(this.settingsInput.owner);
         owner = steamId.accountid;
       }
@@ -497,15 +507,11 @@ export default {
       const base64OutputString = btoa(this.settingsOutput);
 
       if (_.isEqual(this.settingsInput, getDefaultSettings())) {
-        const currentUrl = window.location.href.split('?')[0];
-        window.history.replaceState({}, document.title, currentUrl);
+        window.location.hash = '';
       } else {
-        const urlParams = new URLSearchParams();
+        const b64Encoded = encodeURIComponent(base64OutputString);
 
-        urlParams.set('settings', base64OutputString);
-
-        const pageUrl = '?' + urlParams.toString();
-        window.history.replaceState({}, document.title, pageUrl);
+        window.location.hash = b64Encoded;
       }
 
       return `sm_mhud_settings_import ${base64OutputString}`;
@@ -514,13 +520,8 @@ export default {
       const maxLength = 256 - 'sm_mhud_settings_import '.length;
       return this.settingsOutput64.length > maxLength;
     },
-    validSteamID() {
-      try {
-        const steamId = new SteamID(this.settingsInput.owner);
-        return steamId.isValid();
-      } catch {
-        return false;
-      }
+    validOwner() {
+      return this.validSteamID(this.settingsInput.owner);
     },
   },
 };
