@@ -10,6 +10,7 @@
   "dependencies": {
     "bulma": "^0.7.5",
     "core-js": "^2.6.5",
+    "lodash": "^4.17.11",
     "steamid": "^1.1.0",
     "vue": "^2.6.10",
     "vue-clipboard2": "^0.3.0"

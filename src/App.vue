@@ -18,7 +18,12 @@
             >
               Load Settings
             </button>
-            <div class="box" v-else>
+
+            <button @click="resetInput" class="button mb-1 is-warning ml-2">
+              Reset Settings
+            </button>
+
+            <div class="box" v-if="showLoad">
               <div class="is-size-4 mb-2">
                 Load Settings
               </div>
@@ -237,6 +242,7 @@
 
 <script>
 import * as SteamID from 'steamid';
+import * as _ from 'lodash';
 
 function rgbToHex(r, g, b) {
   const result =
@@ -266,40 +272,66 @@ function hexToRgb(hex) {
   return result;
 }
 
+function getDefaultSettings() {
+  const defaultSettingsInput = {
+    owner: '',
+    data: {
+      speedToggle: false,
+      speedPositionX: -1.0,
+      speedPositionY: 0.7,
+      speedNormalColor: '#FFFFFF',
+      speedPerfColor: '#00FF00',
+      speedDisplayFormat: false,
+      keysToggle: false,
+      keysPositionX: -1.0,
+      keysPositionY: 0.8,
+      keysNormalColor: '#FFFFFF',
+      keysOverlapColor: '#FF0000',
+    },
+  };
+
+  return defaultSettingsInput;
+}
+
 export default {
   data() {
     return {
       showLoad: false,
       loadInput: '',
-      settingsInput: {
-        owner: '',
-        data: {
-          speedToggle: false,
-          speedPositionX: -1.0,
-          speedPositionY: 0.7,
-          speedNormalColor: '#FFFFFF',
-          speedPerfColor: '#00FF00',
-          speedDisplayFormat: false,
-          keysToggle: false,
-          keysPositionX: -1.0,
-          keysPositionY: 0.8,
-          keysNormalColor: '#FFFFFF',
-          keysOverlapColor: '#FF0000',
-        },
-      },
+      settingsInput: getDefaultSettings(),
       disableAlpha: true,
+      firstLoad: true,
     };
+  },
+  created() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.has('settings')) {
+      const settingsString = urlParams.get('settings');
+      this.parse64(settingsString, false);
+    }
   },
   methods: {
     onLoadInput() {
       const loadInput = this.loadInput.replace('sm_mhud_settings_import ', '');
-      const json = atob(loadInput);
+
+      this.parse64(loadInput);
+
+      this.showLoad = false;
+    },
+    resetInput() {
+      this.settingsInput = getDefaultSettings();
+    },
+    parse64(b64String) {
+      const json = atob(b64String);
       const obj = JSON.parse(json);
 
       const steamID = SteamID.fromIndividualAccountID(obj.owner);
 
-      if (steamID.isValid()) {
+      if (obj.owner !== '' && steamID.isValid()) {
         this.settingsInput.owner = steamID.getSteam2RenderedID(true);
+      } else {
+        this.settingsInput.owner = '';
       }
 
       this.settingsInput.rev = obj.rev;
@@ -379,8 +411,6 @@ export default {
         keysOverlapColorG,
         keysOverlapColorB,
       );
-
-      this.showLoad = false;
     },
   },
   computed: {
@@ -425,7 +455,7 @@ export default {
         keysOverlapColorObj.g
       } ${keysOverlapColorObj.b}`;
 
-      let owner = null;
+      let owner = '';
 
       if (this.validSteamID) {
         const steamId = new SteamID(this.settingsInput.owner);
@@ -454,6 +484,17 @@ export default {
     },
     settingsOutput64() {
       const base64OutputString = btoa(this.settingsOutput);
+
+      if (_.isEqual(this.settingsInput, getDefaultSettings())) {
+        window.history.pushState({}, document.title, '/');
+      } else {
+        const urlParams = new URLSearchParams();
+
+        urlParams.set('settings', base64OutputString);
+
+        const pageUrl = '?' + urlParams.toString();
+        window.history.pushState({}, document.title, pageUrl);
+      }
 
       return `sm_mhud_settings_import ${base64OutputString}`;
     },
