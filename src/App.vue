@@ -497,7 +497,8 @@ export default {
       const base64OutputString = btoa(this.settingsOutput);
 
       if (_.isEqual(this.settingsInput, getDefaultSettings())) {
-        window.history.replaceState({}, document.title, '/');
+        const currentUrl = window.location.href.split('?')[0];
+        window.history.replaceState({}, document.title, currentUrl);
       } else {
         const urlParams = new URLSearchParams();
 
