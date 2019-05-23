@@ -11,17 +11,25 @@
               Edit your <strong>MovementHUD</strong> settings with ease!
             </p>
 
-            <button
-              v-if="!showLoad"
-              @click="showLoad = true"
-              class="button mb-1 is-primary mr-2"
-            >
-              Load Settings
-            </button>
-
-            <button @click="resetInput" class="button mb-1 is-warning">
-              Reset Settings
-            </button>
+            <div class="columns">
+              <div class="column">
+                <button
+                  v-if="!showLoad"
+                  @click="showLoad = true"
+                  class="button mb-1 is-primary mr-2 is-fullwidth"
+                >
+                  Load Settings
+                </button>
+              </div>
+              <div class="column">
+                <button
+                  @click="resetInput"
+                  class="button mb-1 is-warning is-fullwidth"
+                >
+                  Reset Settings
+                </button>
+              </div>
+            </div>
 
             <div class="box" v-if="showLoad">
               <div class="is-size-4 mb-2">
@@ -54,202 +62,216 @@
               </div>
             </div>
 
-            <div class="field">
-              <label class="label">Owner</label>
-              <div class="control">
-                <input
-                  type="text"
-                  v-model="settingsInput.owner"
-                  placeholder="STEAM_1:1:6157769"
-                  class="input"
+            <div class="box mt-4">
+              <div class="is-size-4 mb-2">
+                Input
+              </div>
+
+              <div class="is-divider" data-content="GENERAL"></div>
+
+              <div class="field">
+                <label class="label">Owner</label>
+                <div class="control">
+                  <input
+                    type="text"
+                    v-model="settingsInput.owner"
+                    placeholder="STEAM_1:1:6157769"
+                    class="input"
+                    :class="{
+                      'is-danger':
+                        !validOwner && this.settingsInput.owner !== '',
+                      'is-success': validOwner,
+                    }"
+                  />
+                </div>
+              </div>
+
+              <div
+                class="notification is-danger p-1"
+                v-if="!validOwner && this.settingsInput.owner !== ''"
+              >
+                Invalid Steam ID
+              </div>
+
+              <div class="is-divider" data-content="SPEED"></div>
+
+              <div class="field">
+                <label class="label">
+                  Display Speed
+                </label>
+                <button
+                  class="button"
                   :class="{
-                    'is-danger': !validOwner && this.settingsInput.owner !== '',
-                    'is-success': validOwner,
+                    'is-primary': settingsInput.data.speedDisplay === '0',
                   }"
-                />
+                  @click="settingsInput.data.speedDisplay = '0'"
+                >
+                  Disabled
+                </button>
+                <button
+                  class="button ml-2"
+                  :class="{
+                    'is-primary': settingsInput.data.speedDisplay === '1',
+                  }"
+                  @click="settingsInput.data.speedDisplay = '1'"
+                >
+                  Float (23.45)
+                </button>
+                <button
+                  class="button ml-2"
+                  :class="{
+                    'is-primary': settingsInput.data.speedDisplay === '2',
+                  }"
+                  @click="settingsInput.data.speedDisplay = '2'"
+                >
+                  Integer (23)
+                </button>
+              </div>
+
+              <div class="field">
+                <label class="label">Speed Position X</label>
+                <div class="control">
+                  <input
+                    type="number"
+                    v-model="settingsInput.data.speedPositionX"
+                    min="-1"
+                    max="1"
+                    step="0.1"
+                    class="input"
+                    :disabled="settingsInput.data.speedDisplay === '0'"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Speed Position Y</label>
+                <div class="control">
+                  <input
+                    type="number"
+                    v-model="settingsInput.data.speedPositionY"
+                    min="-1"
+                    max="1"
+                    step="0.1"
+                    class="input"
+                    :disabled="settingsInput.data.speedDisplay === '0'"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Speed Normal Color</label>
+                <div class="control">
+                  <input
+                    type="color"
+                    v-model="settingsInput.data.speedNormalColor"
+                    class="input"
+                    :disabled="settingsInput.data.speedDisplay === '0'"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Speed Perf Color</label>
+                <div class="control">
+                  <input
+                    type="color"
+                    v-model="settingsInput.data.speedPerfColor"
+                    class="input"
+                    :disabled="settingsInput.data.speedDisplay === '0'"
+                  />
+                </div>
+              </div>
+
+              <div class="is-divider" data-content="KEYS"></div>
+
+              <div class="field">
+                <label class="label">
+                  Display Keys
+                </label>
+                <button
+                  class="button"
+                  :class="{
+                    'is-primary': settingsInput.data.keysDisplay === '0',
+                  }"
+                  @click="settingsInput.data.keysDisplay = '0'"
+                >
+                  Disabled
+                </button>
+                <button
+                  class="button ml-2"
+                  :class="{
+                    'is-primary': settingsInput.data.keysDisplay === '1',
+                  }"
+                  @click="settingsInput.data.keysDisplay = '1'"
+                >
+                  Blanks as underscores
+                </button>
+                <button
+                  class="button ml-2"
+                  :class="{
+                    'is-primary': settingsInput.data.keysDisplay === '2',
+                  }"
+                  @click="settingsInput.data.keysDisplay = '2'"
+                >
+                  Dont show blanks
+                </button>
+              </div>
+
+              <div class="field">
+                <label class="label">Keys Position X</label>
+                <div class="control">
+                  <input
+                    type="number"
+                    v-model="settingsInput.data.keysPositionX"
+                    min="-1"
+                    max="1"
+                    step="0.1"
+                    class="input"
+                    :disabled="settingsInput.data.keysDisplay === '0'"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Keys Position Y</label>
+                <div class="control">
+                  <input
+                    type="number"
+                    v-model="settingsInput.data.keysPositionY"
+                    min="-1"
+                    max="1"
+                    step="0.1"
+                    class="input"
+                    :disabled="settingsInput.data.keysDisplay === '0'"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Keys Normal Color</label>
+                <div class="control">
+                  <input
+                    type="color"
+                    v-model="settingsInput.data.keysNormalColor"
+                    class="input"
+                    :disabled="settingsInput.data.keysDisplay === '0'"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Keys Overlap Color</label>
+                <div class="control">
+                  <input
+                    type="color"
+                    v-model="settingsInput.data.keysOverlapColor"
+                    class="input"
+                    :disabled="settingsInput.data.keysDisplay === '0'"
+                  />
+                </div>
               </div>
             </div>
 
-            <div
-              class="notification is-danger p-1"
-              v-if="!validOwner && this.settingsInput.owner !== ''"
-            >
-              Invalid Steam ID
-            </div>
-
-            <div class="field">
-              <label class="label">
-                Display Speed
-              </label>
-              <button
-                class="button"
-                :class="{
-                  'is-primary': settingsInput.data.speedDisplay === '0',
-                }"
-                @click="settingsInput.data.speedDisplay = '0'"
-              >
-                Disabled
-              </button>
-              <button
-                class="button ml-2"
-                :class="{
-                  'is-primary': settingsInput.data.speedDisplay === '1',
-                }"
-                @click="settingsInput.data.speedDisplay = '1'"
-              >
-                Float (23.45)
-              </button>
-              <button
-                class="button ml-2"
-                :class="{
-                  'is-primary': settingsInput.data.speedDisplay === '2',
-                }"
-                @click="settingsInput.data.speedDisplay = '2'"
-              >
-                Integer (23)
-              </button>
-            </div>
-
-            <div class="field">
-              <label class="label">Speed Position X</label>
-              <div class="control">
-                <input
-                  type="number"
-                  v-model="settingsInput.data.speedPositionX"
-                  min="-1"
-                  max="1"
-                  step="0.1"
-                  class="input"
-                  :disabled="settingsInput.data.speedDisplay === '0'"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Speed Position Y</label>
-              <div class="control">
-                <input
-                  type="number"
-                  v-model="settingsInput.data.speedPositionY"
-                  min="-1"
-                  max="1"
-                  step="0.1"
-                  class="input"
-                  :disabled="settingsInput.data.speedDisplay === '0'"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Speed Normal Color</label>
-              <div class="control">
-                <input
-                  type="color"
-                  v-model="settingsInput.data.speedNormalColor"
-                  class="input"
-                  :disabled="settingsInput.data.speedDisplay === '0'"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Speed Perf Color</label>
-              <div class="control">
-                <input
-                  type="color"
-                  v-model="settingsInput.data.speedPerfColor"
-                  class="input"
-                  :disabled="settingsInput.data.speedDisplay === '0'"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">
-                Display Keys
-              </label>
-              <button
-                class="button"
-                :class="{
-                  'is-primary': settingsInput.data.keysDisplay === '0',
-                }"
-                @click="settingsInput.data.keysDisplay = '0'"
-              >
-                Disabled
-              </button>
-              <button
-                class="button ml-2"
-                :class="{
-                  'is-primary': settingsInput.data.keysDisplay === '1',
-                }"
-                @click="settingsInput.data.keysDisplay = '1'"
-              >
-                Blanks as underscores
-              </button>
-              <button
-                class="button ml-2"
-                :class="{
-                  'is-primary': settingsInput.data.keysDisplay === '2',
-                }"
-                @click="settingsInput.data.keysDisplay = '2'"
-              >
-                Dont show blanks
-              </button>
-            </div>
-
-            <div class="field">
-              <label class="label">Keys Position X</label>
-              <div class="control">
-                <input
-                  type="number"
-                  v-model="settingsInput.data.keysPositionX"
-                  min="-1"
-                  max="1"
-                  step="0.1"
-                  class="input"
-                  :disabled="settingsInput.data.keysDisplay === '0'"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Keys Position Y</label>
-              <div class="control">
-                <input
-                  type="number"
-                  v-model="settingsInput.data.keysPositionY"
-                  min="-1"
-                  max="1"
-                  step="0.1"
-                  class="input"
-                  :disabled="settingsInput.data.keysDisplay === '0'"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Keys Normal Color</label>
-              <div class="control">
-                <input
-                  type="color"
-                  v-model="settingsInput.data.keysNormalColor"
-                  class="input"
-                  :disabled="settingsInput.data.keysDisplay === '0'"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Keys Overlap Color</label>
-              <div class="control">
-                <input
-                  type="color"
-                  v-model="settingsInput.data.keysOverlapColor"
-                  class="input"
-                  :disabled="settingsInput.data.keysDisplay === '0'"
-                />
-              </div>
-            </div>
             <div class="box mt-4">
               <div class="is-size-4 mb-2">
                 Output

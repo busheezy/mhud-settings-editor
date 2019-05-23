@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "bulma": "^0.7.5",
+    "bulma-divider": "^0.2.0",
     "core-js": "^2.6.5",
     "lodash": "^4.17.11",
     "steamid": "^1.1.1",
