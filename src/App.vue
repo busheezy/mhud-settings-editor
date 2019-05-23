@@ -12,16 +12,16 @@
             </p>
 
             <div class="columns">
-              <div class="column">
+              <div class="column py-0">
                 <button
                   v-if="!showLoad"
                   @click="showLoad = true"
-                  class="button mb-1 is-primary mr-2 is-fullwidth"
+                  class="button mb-1 is-primary is-fullwidth"
                 >
                   Load Settings
                 </button>
               </div>
-              <div class="column">
+              <div class="column py-0">
                 <button
                   @click="resetInput"
                   class="button mb-1 is-warning is-fullwidth"
