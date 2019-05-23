@@ -97,6 +97,7 @@
                 <label class="label">
                   Display Speed
                 </label>
+
                 <button
                   class="button"
                   :class="{
@@ -110,7 +111,7 @@
                 <br class="is-hidden-desktop" />
 
                 <button
-                  class="button ml-2"
+                  class="button ml-0 ml-lg-2 mt-2 mt-lg-0"
                   :class="{
                     'is-primary': settingsInput.data.speedDisplay === '1',
                   }"
@@ -122,7 +123,7 @@
                 <br class="is-hidden-desktop" />
 
                 <button
-                  class="button ml-2"
+                  class="button ml-0 ml-lg-2 mt-2 mt-lg-0"
                   :class="{
                     'is-primary': settingsInput.data.speedDisplay === '2',
                   }"
@@ -188,11 +189,13 @@
             </div>
 
             <div class="box mt-4">
-              <h1 class="title has-text-centered">Keys Settings</h1>
+              <h2 class="title has-text-centered is-4">Keys Settings</h2>
+              <hr />
               <div class="field">
                 <label class="label">
                   Display Keys
                 </label>
+
                 <button
                   class="button"
                   :class="{
@@ -206,7 +209,7 @@
                 <br class="is-hidden-desktop" />
 
                 <button
-                  class="button ml-2"
+                  class="button ml-0 ml-lg-2 mt-2 mt-lg-0"
                   :class="{
                     'is-primary': settingsInput.data.keysDisplay === '1',
                   }"
@@ -218,7 +221,7 @@
                 <br class="is-hidden-desktop" />
 
                 <button
-                  class="button ml-2"
+                  class="button ml-0 ml-lg-2 mt-2 mt-lg-0"
                   :class="{
                     'is-primary': settingsInput.data.keysDisplay === '2',
                   }"
@@ -284,10 +287,8 @@
             </div>
 
             <div class="box mt-4">
-              <div class="is-size-4 mb-2">
-                Output
-              </div>
-
+              <h2 class="title has-text-centered is-4">Output</h2>
+              <hr />
               <div>{{ settingsOutput64.length }} / 256</div>
               <progress
                 class="progress"
@@ -417,23 +418,12 @@ export default {
     resetInput() {
       this.settingsInput = getDefaultSettings();
     },
-    validSteamID(steamIDInput) {
-      if (steamIDInput === '') {
-        return false;
-      }
-      try {
-        const steamId = new SteamID(steamIDInput);
-        return steamId.isValid();
-      } catch {
-        return false;
-      }
-    },
     parse64(b64String) {
       const json = atob(b64String);
       const obj = JSON.parse(json);
+      const steamID = SteamID.fromIndividualAccountID(obj.owner);
 
-      if (this.validOwner) {
-        const steamID = SteamID.fromIndividualAccountID(obj.owner);
+      if (steamID.isValid()) {
         this.settingsInput.owner = steamID.getSteam2RenderedID(true);
       } else {
         this.settingsInput.owner = '';
@@ -600,7 +590,8 @@ export default {
       return this.settingsOutput64.length > maxLength;
     },
     validOwner() {
-      return this.validSteamID(this.settingsInput.owner);
+      const steamID = new SteamID(this.settingsInput.owner);
+      return steamID.isValid();
     },
   },
 };
