@@ -91,7 +91,8 @@
             </div>
 
             <div class="box mt-4">
-              <h1 class="title has-text-centered">Speed Settings</h1>
+              <h2 class="title has-text-centered is-4">Speed Settings</h2>
+              <hr />
               <div class="field">
                 <label class="label">
                   Display Speed
