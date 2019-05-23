@@ -579,7 +579,6 @@ export default {
         window.location.hash = '';
       } else {
         const b64Encoded = encodeURIComponent(base64OutputString);
-
         window.location.hash = b64Encoded;
       }
 
