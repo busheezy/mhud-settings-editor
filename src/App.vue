@@ -77,6 +77,8 @@
               Invalid Steam ID
             </div>
 
+            <div class="is-divider" data-content="OR"></div>
+
             <div class="field">
               <label class="label">
                 Display Speed
