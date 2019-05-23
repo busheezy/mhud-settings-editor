@@ -63,7 +63,8 @@
             </div>
 
             <div class="box mt-4">
-              <h1 class="title has-text-centered">General Settings</h1>
+              <h2 class="title has-text-centered is-4">General Settings</h2>
+              <hr />
               <div class="field">
                 <label class="label">Owner</label>
                 <div class="control">
