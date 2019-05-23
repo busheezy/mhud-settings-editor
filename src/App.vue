@@ -63,12 +63,7 @@
             </div>
 
             <div class="box mt-4">
-              <div class="is-size-4 mb-2">
-                Input
-              </div>
-
-              <div class="is-divider" data-content="GENERAL"></div>
-
+              <h1 class="title has-text-centered">General Settings</h1>
               <div class="field">
                 <label class="label">Owner</label>
                 <div class="control">
@@ -92,9 +87,10 @@
               >
                 Invalid Steam ID
               </div>
+            </div>
 
-              <div class="is-divider" data-content="SPEED"></div>
-
+            <div class="box mt-4">
+              <h1 class="title has-text-centered">Speed Settings</h1>
               <div class="field">
                 <label class="label">
                   Display Speed
@@ -181,9 +177,10 @@
                   />
                 </div>
               </div>
+            </div>
 
-              <div class="is-divider" data-content="KEYS"></div>
-
+            <div class="box mt-4">
+              <h1 class="title has-text-centered">Keys Settings</h1>
               <div class="field">
                 <label class="label">
                   Display Keys
@@ -213,7 +210,7 @@
                   }"
                   @click="settingsInput.data.keysDisplay = '2'"
                 >
-                  Dont show blanks
+                  Blanks invisible
                 </button>
               </div>
 
