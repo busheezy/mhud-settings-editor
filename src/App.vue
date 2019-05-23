@@ -78,14 +78,36 @@
             </div>
 
             <div class="field">
-              <label class="checkbox">
-                <input
-                  type="checkbox"
-                  id="checkbox"
-                  v-model="settingsInput.data.speedToggle"
-                />
-                Show Speed
+              <label class="label">
+                Display Speed
               </label>
+              <button
+                class="button"
+                :class="{
+                  'is-primary': settingsInput.data.speedDisplay === '0',
+                }"
+                @click="settingsInput.data.speedDisplay = '0'"
+              >
+                Disabled
+              </button>
+              <button
+                class="button ml-2"
+                :class="{
+                  'is-primary': settingsInput.data.speedDisplay === '1',
+                }"
+                @click="settingsInput.data.speedDisplay = '1'"
+              >
+                Float (23.45)
+              </button>
+              <button
+                class="button ml-2"
+                :class="{
+                  'is-primary': settingsInput.data.speedDisplay === '2',
+                }"
+                @click="settingsInput.data.speedDisplay = '2'"
+              >
+                Integer (23)
+              </button>
             </div>
 
             <div class="field">
@@ -98,6 +120,7 @@
                   max="1"
                   step="0.1"
                   class="input"
+                  :disabled="settingsInput.data.speedDisplay === '0'"
                 />
               </div>
             </div>
@@ -112,6 +135,7 @@
                   max="1"
                   step="0.1"
                   class="input"
+                  :disabled="settingsInput.data.speedDisplay === '0'"
                 />
               </div>
             </div>
@@ -123,6 +147,7 @@
                   type="color"
                   v-model="settingsInput.data.speedNormalColor"
                   class="input"
+                  :disabled="settingsInput.data.speedDisplay === '0'"
                 />
               </div>
             </div>
@@ -134,19 +159,42 @@
                   type="color"
                   v-model="settingsInput.data.speedPerfColor"
                   class="input"
+                  :disabled="settingsInput.data.speedDisplay === '0'"
                 />
               </div>
             </div>
 
             <div class="field">
-              <label class="checkbox">
-                <input
-                  type="checkbox"
-                  id="checkbox"
-                  v-model="settingsInput.data.keysToggle"
-                />
-                Show Keys
+              <label class="label">
+                Display Keys
               </label>
+              <button
+                class="button"
+                :class="{
+                  'is-primary': settingsInput.data.keysDisplay === '0',
+                }"
+                @click="settingsInput.data.keysDisplay = '0'"
+              >
+                Disabled
+              </button>
+              <button
+                class="button ml-2"
+                :class="{
+                  'is-primary': settingsInput.data.keysDisplay === '1',
+                }"
+                @click="settingsInput.data.keysDisplay = '1'"
+              >
+                Blanks as underscores
+              </button>
+              <button
+                class="button ml-2"
+                :class="{
+                  'is-primary': settingsInput.data.keysDisplay === '2',
+                }"
+                @click="settingsInput.data.keysDisplay = '2'"
+              >
+                Dont show blanks
+              </button>
             </div>
 
             <div class="field">
@@ -159,6 +207,7 @@
                   max="1"
                   step="0.1"
                   class="input"
+                  :disabled="settingsInput.data.keysDisplay === '0'"
                 />
               </div>
             </div>
@@ -173,6 +222,7 @@
                   max="1"
                   step="0.1"
                   class="input"
+                  :disabled="settingsInput.data.keysDisplay === '0'"
                 />
               </div>
             </div>
@@ -184,6 +234,7 @@
                   type="color"
                   v-model="settingsInput.data.keysNormalColor"
                   class="input"
+                  :disabled="settingsInput.data.keysDisplay === '0'"
                 />
               </div>
             </div>
@@ -195,6 +246,7 @@
                   type="color"
                   v-model="settingsInput.data.keysOverlapColor"
                   class="input"
+                  :disabled="settingsInput.data.keysDisplay === '0'"
                 />
               </div>
             </div>
@@ -275,13 +327,12 @@ function getDefaultSettings() {
   const defaultSettingsInput = {
     owner: '',
     data: {
-      speedToggle: false,
+      speedDisplay: '1',
       speedPositionX: -1.0,
       speedPositionY: 0.7,
       speedNormalColor: '#FFFFFF',
       speedPerfColor: '#00FF00',
-      speedDisplayFormat: false,
-      keysToggle: false,
+      keysDisplay: '1',
       keysPositionX: -1.0,
       keysPositionY: 0.8,
       keysNormalColor: '#FFFFFF',
@@ -333,12 +384,12 @@ export default {
     resetInput() {
       this.settingsInput = getDefaultSettings();
     },
-    validSteamID(steamId) {
-      if (steamId === '') {
+    validSteamID(steamIDInput) {
+      if (steamIDInput === '') {
         return false;
       }
       try {
-        const steamId = new SteamID(steamId);
+        const steamId = new SteamID(steamIDInput);
         return steamId.isValid();
       } catch {
         return false;
@@ -358,12 +409,11 @@ export default {
       this.settingsInput.rev = obj.rev;
 
       const [
-        speedToggle,
+        speedDisplay,
         speedPosition,
         speedNormalColor,
         speedPerfColor,
-        speedDisplayFormat,
-        keysToggle,
+        keysDisplay,
         keysPosition,
         keysNormalColor,
         keysOverlapColor,
@@ -397,8 +447,6 @@ export default {
         keysOverlapColorB,
       ] = keysOverlapColor.split(' ');
 
-      this.settingsInput.data.speedToggle = speedToggle === '1';
-
       this.settingsInput.data.speedPositionX = speedPositionX;
       this.settingsInput.data.speedPositionY = speedPositionY;
 
@@ -414,10 +462,6 @@ export default {
         speedPerfColorB,
       );
 
-      this.settingsInput.data.speedDisplayFormat = speedDisplayFormat === '1';
-
-      this.settingsInput.data.keysToggle = keysToggle === '1';
-
       this.settingsInput.data.keysPositionX = keysPositionX;
       this.settingsInput.data.keysPositionY = keysPositionY;
 
@@ -432,6 +476,9 @@ export default {
         keysOverlapColorG,
         keysOverlapColorB,
       );
+
+      this.settingsInput.data.keysDisplay = keysDisplay;
+      this.settingsInput.data.speedDisplay = speedDisplay;
     },
   },
   computed: {
@@ -487,12 +534,11 @@ export default {
         owner,
         rev: 1,
         data: [
-          this.settingsInput.data.speedToggle ? '1' : '0',
+          this.settingsInput.data.speedDisplay,
           speedPosition,
           speedNormalColor,
           speedPerfColor,
-          this.settingsInput.data.speedDisplayFormat ? '1' : '0',
-          this.settingsInput.data.keysToggle ? '1' : '0',
+          this.settingsInput.data.keysDisplay,
           keysPosition,
           keysNormalColor,
           keysOverlapColor,
