@@ -7,7 +7,7 @@
             <h1 class="title is-2 has-text-centered">
               MovementHUD Settings Editor
             </h1>
-            <p class="subtitle">
+            <p class="subtitle has-text-centered">
               Edit your <strong>MovementHUD</strong> settings with ease!
             </p>
 
