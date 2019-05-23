@@ -106,6 +106,9 @@
                 >
                   Disabled
                 </button>
+
+                <br class="is-hidden-desktop" />
+
                 <button
                   class="button ml-2"
                   :class="{
@@ -115,6 +118,9 @@
                 >
                   Float (23.45)
                 </button>
+
+                <br class="is-hidden-desktop" />
+
                 <button
                   class="button ml-2"
                   :class="{
@@ -196,6 +202,9 @@
                 >
                   Disabled
                 </button>
+
+                <br class="is-hidden-desktop" />
+
                 <button
                   class="button ml-2"
                   :class="{
@@ -205,6 +214,9 @@
                 >
                   Blanks as underscores
                 </button>
+
+                <br class="is-hidden-desktop" />
+
                 <button
                   class="button ml-2"
                   :class="{
