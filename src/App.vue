@@ -576,7 +576,11 @@ export default {
       const base64OutputString = btoa(this.settingsOutput);
 
       if (_.isEqual(this.settingsInput, getDefaultSettings())) {
-        window.location.hash = '';
+        history.pushState(
+          '',
+          document.title,
+          window.location.pathname + window.location.search,
+        );
       } else {
         const b64Encoded = encodeURIComponent(base64OutputString);
         window.location.hash = b64Encoded;
@@ -597,12 +601,7 @@ export default {
 </script>
 
 <style>
-.output {
-  width: 100%;
-  height: 40px;
-}
-
-.input {
+.textarea {
   width: 100%;
   height: 40px;
 }
