@@ -7724,10 +7724,10 @@ stealthy-require@^1.1.1:
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
   integrity sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
 
-steamid@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/steamid/-/steamid-1.1.1.tgz#f99e26ecf96d8e6911feef142c0b3d67ed6367f2"
-  integrity sha512-V9oQ9Gyq6gzmUoSYdeNhI9Gb5GhCob1kJIYi1GSBRq2fAIr8SgyGVSmPIiTIzNqyfMBNzN88n6ooeOItNqNGyQ==
+steamid@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/steamid/-/steamid-1.1.2.tgz#506661fa30a7af250e4323bbff2a52a3d530971b"
+  integrity sha512-/jZZdR4z1I87xf0YSdmcw/GCVP6B7wJ4T2ijaUfhPrfdW+hJmmMrEGF7OV69CaLhZshZmDMyessRm3vebAijtQ==
   dependencies:
     cuint "^0.2.1"
 
