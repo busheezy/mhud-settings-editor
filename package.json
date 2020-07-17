@@ -12,7 +12,7 @@
     "bulma": "^0.7.5",
     "bulma-divider": "^0.2.0",
     "core-js": "^2.6.5",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "steamid": "^1.1.2",
     "vue": "^2.6.10",
     "vue-clipboard2": "^0.3.0"
