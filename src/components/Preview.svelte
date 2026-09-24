@@ -83,7 +83,7 @@
 
     const left = (x / 1000) * 100;
 
-    return `left: ${left}%; text-align: left;`;
+    return `left: ${left}%; text-align: center;`;
   }
 
   function getVerticalStyle(element: HudElement) {
