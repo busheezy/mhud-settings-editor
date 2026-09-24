@@ -3,6 +3,7 @@
     buildConfig,
     importCommand,
     maxCodeLength,
+    maxLineLength,
     planExport,
   } from "../lib/code";
   import { codeOrder, definitions, isDefault } from "../lib/preferences";
@@ -129,8 +130,9 @@
         <p
           class="rounded-lg border border-amber-400/30 bg-amber-400/10 px-3 py-2 text-xs text-amber-200"
         >
-          MovementHUD only reads codes up to {maxCodeLength} characters, so
-          {overflowText} set with the commands below instead.
+          The CS:GO console cuts lines off at {maxLineLength} characters, which leaves
+          room for a {maxCodeLength} character code, so {overflowText} set with the
+          commands below instead.
         </p>
       {/if}
 

@@ -8,7 +8,7 @@ A web editor for [MovementHUD](https://github.com/zer0k-z/movementhud) preferenc
 
 - Every MovementHUD preference, including rounding, takeoff speed, gain/loss colors, mouse direction, key spacing, indicators, and update speed.
 - A live preview that simulates a bhop run with your settings. Drag the elements to reposition them.
-- Exports an `sm_mhud_import` code. Codes over MovementHUD's 255 character limit are trimmed, and the settings that don't fit are listed as follow-up commands.
+- Exports an `sm_mhud_import` code. Codes are trimmed so the whole import line fits within the CS:GO console's 255 character input limit, and the settings that don't fit are listed as follow-up commands.
 - Exports a `mhud.cfg` config file that sets every preference, including the ones codes can't hold.
 - Imports export codes (including older revisions), import lines, and config files.
 - The URL updates as you edit, so you can share a link to your settings.

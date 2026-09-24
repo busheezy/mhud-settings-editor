@@ -8,9 +8,13 @@ import { normalizeValue } from "./values";
 
 export const currentRevision = 3;
 
-export const maxCodeLength = 255;
-
 export const importCommand = "sm_mhud_import";
+
+export const maxLineLength = 255;
+
+const importPrefixLength = importCommand.length + 1;
+
+export const maxCodeLength = maxLineLength - importPrefixLength;
 
 const importPrefixPattern = /^\s*sm_mhud_(settings_|preferences_)?import\s+/i;
 
