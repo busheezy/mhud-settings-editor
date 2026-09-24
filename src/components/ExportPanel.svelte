@@ -68,7 +68,9 @@
   }
 </script>
 
-<section class="rounded-2xl border border-zinc-800 bg-zinc-900/60">
+<section
+  class="rounded-2xl border border-zinc-800 bg-zinc-900/60 lg:flex lg:min-h-0 lg:flex-col"
+>
   <div
     class="flex items-center justify-between gap-3 border-b border-zinc-800 px-4 py-3"
   >
@@ -97,18 +99,14 @@
     </div>
   </div>
 
-  <div class="flex flex-col gap-4 p-4" role="tabpanel">
+  <div
+    class="flex flex-col gap-4 p-4 lg:min-h-0 lg:overflow-y-auto"
+    role="tabpanel"
+  >
     {#if tab === "code"}
       <p class="text-sm text-zinc-400">
         Paste this into your in-game console and press enter.
       </p>
-
-      <div class="rounded-xl border border-zinc-800 bg-zinc-950 p-3">
-        <code
-          class="block font-mono text-xs leading-relaxed break-all text-zinc-300"
-          >{importLine}</code
-        >
-      </div>
 
       <div class="flex items-center gap-3">
         <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-zinc-800">
@@ -124,6 +122,13 @@
           >{codeLength} / {maxCodeLength}</span
         >
         <CopyButton text={importLine} primary />
+      </div>
+
+      <div class="rounded-xl border border-zinc-800 bg-zinc-950 p-3">
+        <code
+          class="block font-mono text-xs leading-relaxed break-all text-zinc-300"
+          >{importLine}</code
+        >
       </div>
 
       {#if hasOverflow}

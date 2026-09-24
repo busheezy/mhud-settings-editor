@@ -173,8 +173,12 @@
       {/each}
     </div>
 
-    <div class="order-1 flex flex-col gap-6 lg:sticky lg:top-6 lg:order-2">
-      <Preview />
+    <div
+      class="order-1 flex flex-col gap-6 lg:sticky lg:top-6 lg:order-2 lg:max-h-[calc(100dvh-3rem)]"
+    >
+      <div class="shrink-0">
+        <Preview />
+      </div>
       <ExportPanel />
     </div>
   </main>
