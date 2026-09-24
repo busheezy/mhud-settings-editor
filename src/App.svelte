@@ -2,6 +2,7 @@
   import CopyButton from "./components/CopyButton.svelte";
   import ExportPanel from "./components/ExportPanel.svelte";
   import ImportDialog from "./components/ImportDialog.svelte";
+  import PresetPicker from "./components/PresetPicker.svelte";
   import PreferenceField from "./components/PreferenceField.svelte";
   import Preview from "./components/Preview.svelte";
   import {
@@ -10,6 +11,7 @@
     isDefault,
     type PreferenceGroup,
   } from "./lib/preferences";
+  import type { Preset } from "./lib/presets";
   import {
     loadFromHash,
     preferences,
@@ -86,6 +88,10 @@
     showNotice(`Imported ${count} ${noun}.`);
   }
 
+  function onPresetApplied(preset: Preset) {
+    showNotice(`Applied the ${preset.name} preset.`);
+  }
+
   function reset() {
     resetPreferences();
     showNotice("All settings reset to defaults.");
@@ -149,6 +155,7 @@
     class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]"
   >
     <div class="order-2 flex flex-col gap-6 lg:order-1">
+      <PresetPicker onapplied={onPresetApplied} />
       {#each sections as section (section.group)}
         <section class="rounded-2xl border border-zinc-800 bg-zinc-900/60">
           <div class="border-b border-zinc-800 px-5 py-4">

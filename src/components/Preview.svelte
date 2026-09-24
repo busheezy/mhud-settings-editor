@@ -310,7 +310,15 @@
             drag?.id === element.id && "outline-violet-300 outline-dashed",
           ]}
         >
-          {element.text}
+          {#each element.rows as row, rowIndex (rowIndex)}
+            <span class="flex min-h-[1.15em] justify-center">
+              {#each row as cell, cellIndex (cellIndex)}
+                <span class={[element.isGrid && "w-[1.7em] text-center"]}
+                  >{cell}</span
+                >
+              {/each}
+            </span>
+          {/each}
           <span
             class="pointer-events-none absolute -top-5 left-0 rounded bg-violet-500 px-1.5 py-0.5 font-sans text-[10px] leading-none font-semibold text-white opacity-0 transition-opacity [text-shadow:none] group-hover:opacity-100 group-focus-visible:opacity-100"
           >

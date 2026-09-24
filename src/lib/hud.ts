@@ -6,7 +6,8 @@ export type HudElementId = "speed" | "keys" | "indicators";
 
 export type HudElement = {
   id: HudElementId;
-  text: string;
+  rows: string[][];
+  isGrid: boolean;
   rgb: Rgb;
   xy: Xy;
 };
@@ -23,55 +24,9 @@ type ColorPreferenceIds = {
 
 const keysModeUnderscores = 1;
 
-const keysModeNoBlanks = 2;
-
-const spaceModeLegacy = 3;
-
 const mouseStyleSide = 1;
 
 const mouseStyleLine = 2;
-
-const spacedKeys: Record<
-  number,
-  Record<KeyChar | "space" | "underscore", string>
-> = {
-  0: {
-    space: "     ",
-    underscore: "  —  ",
-    W: " W ",
-    A: "  A  ",
-    S: "  S  ",
-    D: "  D  ",
-    C: "  C  ",
-    J: "  J  ",
-    "←": "  ← ",
-    "→": " →  ",
-  },
-  1: {
-    space: "     ",
-    underscore: "  —  ",
-    W: " W ",
-    A: "  A  ",
-    S: "  S  ",
-    D: "  D  ",
-    C: "  C  ",
-    J: "  J  ",
-    "←": "  ← ",
-    "→": " →  ",
-  },
-  2: {
-    space: "      ",
-    underscore: " — ",
-    W: " W ",
-    A: " A ",
-    S: "  S  ",
-    D: "  D ",
-    C: "  C  ",
-    J: "  J  ",
-    "←": "  ← ",
-    "→": " →  ",
-  },
-};
 
 function getColorBySpeed(speed: number): Rgb {
   const x = Math.round(speed / 50) * 32;
@@ -215,7 +170,7 @@ function buildSpeedElement(
   const speedText = formatSpeed(frame.speed, mode, rounding);
   const takeoffText = formatSpeed(frame.takeoffSpeed, mode, rounding);
   const hasTakeoff = shouldShowTakeoff(showTakeoff, frame);
-  const text = hasTakeoff ? `${speedText}\n(${takeoffText})` : speedText;
+  const rows = hasTakeoff ? [[speedText], [`(${takeoffText})`]] : [[speedText]];
 
   const ids: ColorPreferenceIds = {
     colorBy: "speed_color_by_speed",
@@ -228,34 +183,7 @@ function buildSpeedElement(
   const rgb = getElementColor(preferences, frame, ids, frame.didPerf);
   const xy = parseXy(preferences.speed_position ?? "");
 
-  return { id: "speed", text, rgb, xy };
-}
-
-function getKeyString(
-  key: KeyChar,
-  mode: number,
-  spaceMode: number,
-  pressed: boolean,
-) {
-  const spacing = spacedKeys[spaceMode];
-
-  if (!spacing) {
-    return "";
-  }
-
-  if (pressed) {
-    return spacing[key];
-  }
-
-  if (mode === keysModeNoBlanks) {
-    return spacing.space;
-  }
-
-  if (mode === keysModeUnderscores) {
-    return spacing.underscore;
-  }
-
-  return "";
+  return { id: "speed", rows, isGrid: false, rgb, xy };
 }
 
 function didButtonsOverlap(buttons: Buttons) {
@@ -291,90 +219,39 @@ function getKeyState(frame: MovementFrame): KeyState {
   };
 }
 
-type KeysContext = {
-  state: KeyState;
-  mode: number;
-  spaceMode: number;
-  mouseStyle: number;
-  blank: string;
-};
-
-function simpleKey(key: KeyChar, pressed: boolean, blank: string) {
+function keyCell(key: KeyChar, pressed: boolean, blank: string) {
   return pressed ? key : blank;
 }
 
-function buildSimpleRows(context: KeysContext) {
-  const { state, blank } = context;
-  const c = simpleKey("C", state.crouch, blank);
-  const w = simpleKey("W", state.forward, blank);
-  const j = simpleKey("J", state.jump, blank);
-  const a = simpleKey("A", state.left, blank);
-  const s = simpleKey("S", state.back, blank);
-  const d = simpleKey("D", state.right, blank);
-  const arrowLeft = simpleKey("←", state.mouseLeft, blank);
-  const arrowRight = simpleKey("→", state.mouseRight, blank);
+function buildKeyRows(state: KeyState, mouseStyle: number, blank: string) {
+  const c = keyCell("C", state.crouch, blank);
+  const w = keyCell("W", state.forward, blank);
+  const j = keyCell("J", state.jump, blank);
+  const a = keyCell("A", state.left, blank);
+  const s = keyCell("S", state.back, blank);
+  const d = keyCell("D", state.right, blank);
+  const arrowLeft = keyCell("←", state.mouseLeft, blank);
+  const arrowRight = keyCell("→", state.mouseRight, blank);
 
-  return { c, w, j, a, s, d, arrowLeft, arrowRight };
-}
-
-function buildSpacedRows(context: KeysContext) {
-  const { state, mode, spaceMode } = context;
-  const c = getKeyString("C", mode, spaceMode, state.crouch);
-  const w = getKeyString("W", mode, spaceMode, state.forward);
-  const j = getKeyString("J", mode, spaceMode, state.jump);
-  const a = getKeyString("A", mode, spaceMode, state.left);
-  const s = getKeyString("S", mode, spaceMode, state.back);
-  const d = getKeyString("D", mode, spaceMode, state.right);
-  const arrowLeft = getKeyString("←", mode, spaceMode, state.mouseLeft);
-  const arrowRight = getKeyString("→", mode, spaceMode, state.mouseRight);
-
-  return { c, w, j, a, s, d, arrowLeft, arrowRight };
-}
-
-function buildLegacyKeysText(context: KeysContext) {
-  const simple = buildSimpleRows(context);
-
-  if (context.mouseStyle === mouseStyleSide) {
-    const spaced = buildSpacedRows(context);
-
-    return `${spaced.c}${spaced.w}${spaced.j}\n${spaced.arrowLeft}${spaced.a}${spaced.s}${spaced.d}${spaced.arrowRight}`;
+  if (mouseStyle === mouseStyleSide) {
+    return [
+      [c, w, j],
+      [arrowLeft, a, s, d, arrowRight],
+    ];
   }
 
-  if (context.mouseStyle === mouseStyleLine) {
-    const center = getKeyString(
-      "J",
-      keysModeNoBlanks,
-      context.spaceMode,
-      false,
-    );
-
-    return `${simple.c}${simple.w}${simple.j}\n${simple.arrowLeft}${center}${simple.arrowRight}\n${simple.a}${simple.s}${simple.d}`;
+  if (mouseStyle === mouseStyleLine) {
+    return [
+      [c, w, j],
+      [arrowLeft, "", arrowRight],
+      [a, s, d],
+    ];
   }
 
-  return `${simple.c}  ${simple.w}  ${simple.j}\n${simple.a}  ${simple.s}  ${simple.d}`;
-}
-
-function buildModernKeysText(context: KeysContext) {
-  const spaced = buildSpacedRows(context);
-
-  if (context.mouseStyle === mouseStyleSide) {
-    const simple = buildSimpleRows(context);
-
-    return `${simple.c}  ${simple.w}  ${simple.j}\n${simple.arrowLeft} ${simple.a}  ${simple.s}  ${simple.d} ${simple.arrowRight}`;
-  }
-
-  if (context.mouseStyle === mouseStyleLine) {
-    const center = getKeyString(
-      "J",
-      keysModeNoBlanks,
-      context.spaceMode,
-      false,
-    );
-
-    return `${spaced.c}${spaced.w}${spaced.j}\n${spaced.arrowLeft}${center}${spaced.arrowRight}\n${spaced.a}${spaced.s}${spaced.d}`;
-  }
-
-  return `${spaced.c}${spaced.w}${spaced.j}\n${spaced.a}${spaced.s}${spaced.d}`;
+  return [
+    [c, w, j],
+    [a, s, d],
+  ];
 }
 
 function buildKeysElement(
@@ -387,23 +264,10 @@ function buildKeysElement(
     return null;
   }
 
-  const spaceMode = getInt(preferences, "keys_spacing_mode");
   const mouseStyle = getInt(preferences, "keys_mouse_direction");
-  const isLegacy = spaceMode === spaceModeLegacy;
-  const blank = mode === keysModeNoBlanks ? "—" : "";
+  const blank = mode === keysModeUnderscores ? "—" : "";
   const state = getKeyState(frame);
-
-  const context: KeysContext = {
-    state,
-    mode,
-    spaceMode,
-    mouseStyle,
-    blank,
-  };
-
-  const text = isLegacy
-    ? buildLegacyKeysText(context)
-    : buildModernKeysText(context);
+  const rows = buildKeyRows(state, mouseStyle, blank);
 
   const ids: ColorPreferenceIds = {
     colorBy: "keys_color_by_speed",
@@ -417,7 +281,7 @@ function buildKeysElement(
   const rgb = getElementColor(preferences, frame, ids, isOverlapping);
   const xy = parseXy(preferences.keys_position ?? "");
 
-  return { id: "keys", text, rgb, xy };
+  return { id: "keys", rows, isGrid: true, rgb, xy };
 }
 
 function getIndicatorLabels(preferences: Preferences, frame: MovementFrame) {
@@ -475,11 +339,11 @@ function buildIndicatorsElement(
     return null;
   }
 
-  const text = labels.join("\n");
+  const rows = labels.map((label) => [label]);
   const rgb = parseRgb(preferences.indicators_color ?? "");
   const xy = parseXy(preferences.indicators_position ?? "");
 
-  return { id: "indicators", text, rgb, xy };
+  return { id: "indicators", rows, isGrid: false, rgb, xy };
 }
 
 export function buildHud(preferences: Preferences, frame: MovementFrame) {

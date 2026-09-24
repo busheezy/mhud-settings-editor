@@ -143,7 +143,7 @@ export const definitions: PreferenceDefinition[] = [
     options: ["1080p FS", "1440p resized", "1440p native", "Legacy"],
     defaultValue: "0",
     description:
-      "Spacing tuned for your resolution so the keys do not shift around.",
+      "Spacing tuned for your resolution so the keys do not shift around in game. The preview always shows evenly spaced keys.",
   },
   {
     id: "keys_mouse_direction",
