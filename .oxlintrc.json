@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "max-depth": ["error", 3],
+    "complexity": ["warn", 10],
+    "curly": "error"
+  },
+  "ignorePatterns": ["dist"]
+}

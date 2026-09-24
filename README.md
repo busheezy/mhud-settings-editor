@@ -1,29 +1,34 @@
-# mhud-settings-editor
+# MovementHUD Settings Editor
 
-## Project setup
-```
-yarn install
-```
+A web editor for [MovementHUD](https://github.com/zer0k-z/movementhud) preferences, the GOKZ-integrated movement HUD for CS:GO.
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+**[Open the editor](https://busheezy.github.io/mhud-settings-editor/)**
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+## Features
 
-### Run your tests
-```
-yarn run test
-```
+- Every MovementHUD preference, including rounding, takeoff speed, gain/loss colors, mouse direction, key spacing, indicators, and update speed.
+- A live preview that simulates a bhop run with your settings. Drag the elements to reposition them.
+- Exports an `sm_mhud_import` code. Codes over MovementHUD's 255 character limit are trimmed, and the settings that don't fit are listed as follow-up commands.
+- Exports a `mhud.cfg` config file that sets every preference, including the ones codes can't hold.
+- Imports export codes (including older revisions), import lines, and config files.
+- The URL updates as you edit, so you can share a link to your settings.
 
-### Lints and fixes files
-```
-yarn run lint
+## Development
+
+Requires Node 24 and pnpm.
+
+```sh
+pnpm install
+pnpm dev
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+| Command             | Description                       |
+| ------------------- | --------------------------------- |
+| `pnpm dev`          | Start the dev server              |
+| `pnpm build`        | Build the static site into `dist` |
+| `pnpm check`        | Type-check with svelte-check      |
+| `pnpm lint`         | Lint with Oxlint                  |
+| `pnpm format`       | Format with Prettier              |
+| `pnpm format:check` | Check formatting                  |
+
+Pushes to `master` are checked, built, and deployed to GitHub Pages by the [CI workflow](.github/workflows/ci.yml).
