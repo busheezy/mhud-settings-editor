@@ -41,6 +41,8 @@
   let time = $state(0);
   let isPlaying = $state(true);
   let aspectRatio = $state("16 / 9");
+  let isSolidBackground = $state(false);
+  let backgroundColor = $state("#18181b");
   let drag = $state<DragState | null>(null);
   let isSnapped = $state(false);
   let screen = $state<HTMLDivElement>();
@@ -52,6 +54,7 @@
   const progress = $derived((time % cycleDuration) / cycleDuration);
   const isAnimating = $derived(isPlaying && drag === null);
   const hasElements = $derived(elements.length > 0);
+  const solidColor = $derived(isSolidBackground ? backgroundColor : null);
 
   $effect(() => {
     if (!isAnimating) {
@@ -215,6 +218,10 @@
   function togglePlaying() {
     isPlaying = !isPlaying;
   }
+
+  function toggleSolidBackground() {
+    isSolidBackground = !isSolidBackground;
+  }
 </script>
 
 <section
@@ -229,7 +236,27 @@
         Drag elements to move them. Arrow keys nudge the focused element.
       </p>
     </div>
-    <div class="flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2">
+      <div
+        class="flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-950 py-0.5 pr-0.5 pl-2"
+      >
+        <label class="flex items-center gap-1.5 text-xs text-zinc-400">
+          <input
+            type="checkbox"
+            checked={isSolidBackground}
+            onchange={toggleSolidBackground}
+            class="accent-violet-500"
+          />
+          Solid background
+        </label>
+        <input
+          type="color"
+          bind:value={backgroundColor}
+          disabled={!isSolidBackground}
+          aria-label="Background color"
+          class="h-6 w-7 cursor-pointer rounded-md border-0 bg-transparent p-0 disabled:cursor-not-allowed disabled:opacity-40"
+        />
+      </div>
       <div
         class="flex rounded-lg border border-zinc-800 bg-zinc-950 p-0.5"
         role="radiogroup"
@@ -267,7 +294,7 @@
     class="[container-type:size] relative w-full touch-none overflow-hidden bg-zinc-950 select-none"
     style:aspect-ratio={aspectRatio}
   >
-    <PreviewScene />
+    <PreviewScene {solidColor} />
 
     <div
       class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
